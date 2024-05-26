@@ -1,0 +1,50 @@
+#include <bits/stdc++.h>
+using namespace std;
+#define int long long
+
+
+void ok_computer() {
+
+    int n;
+    cin >> n;
+    int a,b; cin>>a>>b;
+    a--;b--;
+    vector<vector<int>>adj(n);
+    for (int i = 0; i < n - 1; ++i) {
+        int u,uu; cin>>u>>uu;
+        u--;
+        uu--;
+        adj[u].push_back(uu);
+        adj[uu].push_back(u);
+    }
+
+//    if(n==2 and a!=b){
+//        cout<<2<<'\n';
+//        return;
+//    }
+
+    int hh=-1;
+    auto dfs=[&](auto &&self, int i, int p,int cur)->int {
+        if(i==b) {
+            if(hh==-1)
+            hh=cur;
+        }
+        int ans=0;
+        for(auto ii:adj[i])if(ii!=p){
+            ans=max(ans,1+self(self,ii,i,cur+1));
+        }
+        return ans;
+
+    };
+    int f=dfs(dfs,a,-1,0);
+    int ff=dfs(dfs,b,-1,0);
+    cout << min(((2*(n-1))-ff) + hh + hh % 2,
+                ((2 * (n - 1)) - f) + hh) << '\n';
+
+}
+signed main() {
+
+    int tc = 1;
+    cin >> tc;
+    while (tc--)ok_computer();
+}

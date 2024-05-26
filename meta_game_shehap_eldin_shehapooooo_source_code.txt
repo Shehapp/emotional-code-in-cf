@@ -1,0 +1,92 @@
+#include <bits/stdc++.h>
+
+#define int long long
+#define MOD 1000000007
+using namespace std;
+
+signed main() {
+    ios_base::sync_with_stdio(false);
+    cin.tie(NULL);
+    cout.tie(NULL);
+
+
+    freopen("input.txt","r",stdin);
+    freopen("output.txt","w",stdout);
+
+
+
+    int tc; cin>>tc;
+    for (int i = 1; i <=tc ; ++i) {
+        int n; cin>>n;
+        vector<int>a(n),b(n);
+        for (int j = 0; j < n; ++j) {
+            cin>>a[j];
+        }
+        for (int j = 0; j < n; ++j) {
+            cin>>b[j];
+        }
+
+        deque<int>qq;
+        int ne=0,po=0,z=0;
+        for (int j = 0; j < n; ++j) {
+            int c=a[j]-b[j];
+            po+=(c>0);
+            ne+=(c<0);
+            z+=(c==0);
+            qq.push_back(c);
+        }
+
+        int curNeg=0;
+        for (int j = 0; j < n/2; ++j) {
+            if(qq[j]<0)curNeg++;
+        }
+
+        auto check=[&](){
+            bool p=1;
+            for (int j = 0; j < n/2; ++j) {
+                p&=(qq[j]==-qq[n-j-1]);
+            }
+            return p;
+        };
+
+
+        int x=0;
+        bool p=0;
+        for (int j = 0; j <= 2*n+10; ++j) {
+
+            if(curNeg==n/2 and ne==n/2){
+                if(check()) {
+                    p=1;
+                    break;
+                }
+            }
+            if(qq.front()>0) {
+                ne++;
+            }
+            else if(qq.front()<0){
+                ne--;
+                curNeg--;
+            }
+            qq.push_back(-qq.front());
+            qq.pop_front();
+
+            if(qq[(n/2)-1]<0) {
+                curNeg++;
+            }
+            x++;
+        }
+//        cout<<x<<" "<<p<<'\n';
+        if(n%2==1 and p){
+            if( z!=1)
+                cout<<"Case #"<<i<<": "<<-1<<'\n';
+            else
+                cout<<"Case #"<<i<<": "<<x<<'\n';
+            continue;
+        }
+        if(p){
+            cout<<"Case #"<<i<<": "<<x<<'\n';
+        } else
+            cout<<"Case #"<<i<<": "<<-1<<'\n';
+
+    }
+}
